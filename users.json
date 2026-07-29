@@ -1,0 +1,46 @@
+[
+  {
+    "username": "nour",
+    "email": "nour@gmail.com",
+    "password": "1234",
+    "id": 1,
+    "age":100
+  },
+  {
+    "username": "mohamed",
+    "email": "mohamed@gmail.com",
+    "password": "1234",
+    "id": 2,
+    "age":21
+  },
+  {
+    "username": "Ahmed",
+    "email": "Ahmed@gmail.com",
+    "password": "1234",
+    "id": 3,
+    "age":22
+  },
+  {
+    "username": "Omar",
+    "email": "omar@gmail.com",
+    "password": "1234",
+    "id": 4,
+    "age":23
+  },
+  {
+    "username": "Omnia",
+    "email": "omnia@gmail.com",
+    "password": 6789,
+    "id": 5,
+    "age":24,
+    "favfood": "Pasta"
+  },
+  {
+    "username": "Bassant",
+    "email": "Bassant@gmail.com",
+    "password": "5555",
+    "id": 6,
+    "age":18,
+    "favfood": "Spicy food"
+  }
+]
