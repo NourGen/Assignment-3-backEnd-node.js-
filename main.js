@@ -4,7 +4,7 @@ const { resolve } = require("node:path");
 const userSource = resolve("./users.json");
 const fs = require("node:fs");
 const app = express();
-const port = 3000;
+const port = 3001;
 app.use(cors(), express.json());
 
 let auth = true;
@@ -127,6 +127,7 @@ app.post("/login", (req, res, next) => {
 }); //DONE👴
 
 app.get("/users", (req, res, next) => {
+  const { minAge } = req.query;
   fs.readFile(userSource, "utf-8", (error, data) => {
     if (error) {
       return res.status(500).json({ messageError: "Internal Server Error" });
@@ -136,34 +137,49 @@ app.get("/users", (req, res, next) => {
       } catch (error) {
         return res.status(500).json({ messageError: "Internal Server Error" });
       }
-      const safeUsers = data.map(
-        ({ password, ...restOfTheElement }) => restOfTheElement,
-      ); //return a new array without the passwords for the security🕵️‍♂️
-      return res.status(200).json(safeUsers);
-    }
-  });
-}); //DONE👴 //Q.5
+      if (minAge && Number(minAge) >= 18) {
+        const safeUsers = data.map(
+          ({ password, ...restOfTheElement }) => restOfTheElement,
+        ); //return a new array without the passwords for the security🕵️‍♂️
+        const overAge = safeUsers
+          .filter((ele) => ele.age >= minAge)
+          .sort((a, b) => a.age - b.age);
+        console.log({ overAge });
 
-app.get("/users/filter", (req, res, next) => {
-  fs.readFile(userSource, "utf-8", (error, data) => {
-    if (error) {
-      return res.status(500).json({ messageError: "Internal Server Error" });
-    } else {
-      try {
-        data = JSON.parse(data);
-      } catch (error) {
-        return res.status(500).json({ messageError: "Internal Server Error" });
+        return res.status(200).json(overAge);
+      } else if (minAge && Number(minAge) < 18) {
+        return res.status(400).json({errorMessage:"Under Age"});
+      } else {
+        const safeUsers = data.map(
+          ({ password, ...restOfTheElement }) => restOfTheElement,
+        ); //return a new array without the passwords for the security🕵️‍♂️
+        return res.status(200).json(safeUsers);
       }
-      const safeUsers = data
-        .map(({ password, ...restOfTheElement }) => restOfTheElement)
-        .sort((a, b) => a.age - b.age); //(+) sort b before a [b,a] //(-) sort a before b [a,b] //(0) keep the original order
-      return res.status(200).json(safeUsers);
     }
   });
-}); //DONE👴 //Q.6
+}); //DONE👴 //Q.5 Q.6 // Heeeeeeere👈👈👈👈👈👈👈👈
 
-app.get("/user/name/:username", (req, res, next) => {
-  const { username } = req.params;
+// app.get("/users/filter", (req, res, next) => {
+//   fs.readFile(userSource, "utf-8", (error, data) => {
+//     if (error) {
+//       return res.status(500).json({ messageError: "Internal Server Error" });
+//     } else {
+//       try {
+//         data = JSON.parse(data);
+//       } catch (error) {
+//         return res.status(500).json({ messageError: "Internal Server Error" });
+//       }
+//       const safeUsers = data
+//         .map(({ password, ...restOfTheElement }) => restOfTheElement)
+//         .sort((a, b) => a.age - b.age); //(+) sort b before a [b,a] //(-) sort a before b [a,b] //(0) keep the original order
+//       return res.status(200).json(safeUsers);
+//     }
+//   });
+// }); //DONE👴 //Q.6
+
+app.get("/user/getByName", (req, res, next) => {
+  const { username } = req.query;
+  
   fs.readFile(userSource, (error, data) => {
     if (error) {
       res.status(500).json({ messageError: error.message });
@@ -174,7 +190,7 @@ app.get("/user/name/:username", (req, res, next) => {
         res.status(500).json({ messageError: error.message });
       }
       const matchID = data.find((ele) => {
-        return ele.username == username;
+        return ele.username.toLowerCase() == username.toLowerCase();
       });
       if (!matchID) {
         res.status(404).json({ messageError: "Page not found" });
@@ -184,7 +200,7 @@ app.get("/user/name/:username", (req, res, next) => {
       }
     }
   });
-}); //DONE👴 //Q.4
+}); //DONE👴 //Q.4  //Heeeeeeere👈👈👈👈👈👈👈👈
 
 app.get("/user/id/:id", (req, res, next) => {
   const { id, username } = req.params;
