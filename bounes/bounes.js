@@ -20,7 +20,7 @@ Input: strs = ["dog","racecar","car"]
 Output: ""
 Explanation: There is no common prefix among the input strings.
 */
-const strs = ["flower","flow","flight"];
+const strs = ["cir", "car"];
 
 const longestCommonPrefix = function (strs) {
   let result = "";
@@ -29,7 +29,7 @@ const longestCommonPrefix = function (strs) {
   let prefix = [];
 
   function maxlength(array) {
-    prefix = []
+    prefix = [];
     for (let i = 0; i < array.length; i++) {
       prefix.push(array[i].length);
     }
@@ -43,8 +43,11 @@ const longestCommonPrefix = function (strs) {
     });
     return arr.indexOf(match);
   }
-  
+  let flag = false;
   for (let indexOfChar = 0; indexOfChar < maxlength(strs); indexOfChar++) {
+    if (flag === true) {
+      break;
+    }
     let checkChar = strs[elementOfMaxlength(strs)][indexOfChar];
     let num = 0;
 
@@ -56,6 +59,7 @@ const longestCommonPrefix = function (strs) {
         num++;
         // console.log({ resultChar, num });
       } else {
+        flag = true;
         break;
       }
       if (num == strs.length) {
@@ -68,6 +72,5 @@ const longestCommonPrefix = function (strs) {
 };
 console.log(longestCommonPrefix(strs));
 
-
-//🕺💃💃🏃‍♂️🏃‍♂️🕺💃💃🕺🕺🕺🕺 
+//🕺💃💃🏃‍♂️🏃‍♂️🕺💃💃🕺🕺🕺🕺
 //stared 2:16 Ended 5:34
